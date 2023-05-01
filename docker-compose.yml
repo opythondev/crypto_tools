@@ -1,0 +1,71 @@
+version: "3.8"
+networks:
+  app-tier:
+    external: true
+volumes:
+  calc-data:
+  ws-data:
+  redis-data:
+  spread-calc-data:
+services:
+  redis:
+    image: redis
+    mem_limit: 254m
+    mem_reservation: 64M
+    container_name: redis
+    restart: always
+    networks:
+      - app-tier
+    volumes:
+      - ./redis.conf:/redis.conf
+      - redis-data:/data
+    command: [ "redis-server", "/redis.conf" ]
+    ports:
+      - "127.0.0.1:6379:6379"
+#  binanceWSClient:
+#   build:
+#     context: .
+#     dockerfile: ./Services/BinanceWSClient/Dockerfile
+#   restart: always
+#   container_name: bi_ws_client
+#   image: bi_ws_client:tag
+#   mem_limit: 254m
+#   mem_reservation: 128M
+#   volumes:
+#     - ws-data:/client/
+#   networks:
+#     - app-tier
+#   depends_on:
+#    - redis
+  3WayCalculator:
+    build:
+      context: .
+      dockerfile: ./Services/3WayCalculator/Dockerfile
+    restart: always
+    container_name: 3way_calculator
+    image: 3way_calculator:tag
+    mem_limit: 128m
+    mem_reservation: 64M
+    volumes:
+      - calc-data:/calculator/
+    networks:
+      - app-tier
+    depends_on:
+      - redis
+#      - binanceWSClient
+  BinanceSpotSpreadCalculator:
+    build:
+      context: .
+      dockerfile: ./Services/SpreadCalculator/Dockerfile
+    restart: always
+    container_name: bi_spot_spread_calculator
+    image: bi_spread_calculator:tag
+    mem_limit: 128m
+    mem_reservation: 64M
+    volumes:
+      - spread-calc-data:/spreadcalc/
+    networks:
+      - app-tier
+    depends_on:
+      - redis
+#      - binanceWSClient
