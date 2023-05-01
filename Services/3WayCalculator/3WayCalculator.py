@@ -21,8 +21,8 @@ class Calculator:
     __assets = []
 
     # localhost redis
-    __redis = redis.Redis(host='localhost', port=6379, db=0, password=REDIS_PASSWORD)
-    __redis_results = redis.Redis(host='localhost', port=6379, db=1, password=REDIS_PASSWORD)
+    __redis = redis.Redis(host='redis', port=6379, db=0, password=REDIS_PASSWORD)
+    __redis_results = redis.Redis(host='redis', port=6379, db=1, password=REDIS_PASSWORD)
 
     def __init__(self, chains_list):
         self.__chains = chains_list
