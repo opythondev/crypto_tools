@@ -21,8 +21,8 @@ class SpreadCalculator:
     __assets = []
 
     # redis localhost
-    __redis = redis.Redis(host='localhost', port=6379, db=0, password=REDIS_PASSWORD)
-    __redis_results = redis.Redis(host='localhost', port=6379, db=2, password=REDIS_PASSWORD)
+    __redis = redis.Redis(host='redis', port=6379, db=0, password=REDIS_PASSWORD)
+    __redis_results = redis.Redis(host='redis', port=6379, db=2, password=REDIS_PASSWORD)
 
     def __init__(self, ticker_list):
         self.__tickers = ticker_list
